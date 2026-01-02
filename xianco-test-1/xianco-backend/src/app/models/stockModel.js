@@ -20,14 +20,15 @@ class stockModel {
     }
 
     async insertStock(data) {
+        console.log(data);
         const query = 'INSERT INTO product_stocks (product_id, current_stock, createdAt, updatedAt) VALUES (?, ?, NOW(), NOW())';
         const [rows] = await db.execute(query, [data.product_id, data.current_stock]);
         return rows;
     }
 
-    async insertStock(data) {
+    async updateStock(data) {
         const query = 'UPDATE product_stocks SET current_stock = ?, createdAt = NOW(), updatedAt = NOW() WHERE product_id = ?';
-        const [rows] = await db.execute(query, [data.current_stock, data.product_id]);
+        const rows = await db.execute(query, [data.current_stock, data.product_id]);
         return rows;
     }
 }

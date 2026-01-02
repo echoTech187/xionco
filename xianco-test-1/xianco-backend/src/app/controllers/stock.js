@@ -39,7 +39,7 @@ class Stock {
     }
     async store(req, res) {
         try {
-            const stock = await stockModel.insertStock(req.body);
+            const stock = await stockModel.updateStock(req.body);
             return res.status(200).json({
                 success: true,
                 message: 'success',

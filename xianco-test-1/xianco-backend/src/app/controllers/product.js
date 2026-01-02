@@ -36,9 +36,23 @@ class Product {
                 if (product.length > 0) {
                     const stock = await stockModel.getStocksById(product[0].id);
                     if (stock.length > 0) {
-                        return res.status(500).json({ success: false, message: 'Product sudah ada', error: "PRODUCT_ALREADY_EXISTS" });
+                        return res.status(200).json({ success: true, message: 'Product telah ditambahkan' });
+                    } else {
+                        const initStock = {
+                            product_id: product[0].id,
+                            current_stock: 0
+                        }
+                        try {
+                            const insertStock = await stockModel.insertStock(initStock);
+                            if (insertStock.insertId !== 0) {
+                                return res.status(200).json({ success: true, message: 'Product telah ditambahkan' });
+                            } else {
+                                return res.status(500).json({ success: false, message: insertStock.message, error: "STOCK_CREATED_FAILED" });
+                            }
+                        } catch (error) {
+                            return res.status(500).json({ success: false, message: error.message, error: "INTERNAL_SERVER_ERROR" });
+                        }
                     }
-                    return res.status(500).json({ success: false, message: 'Product sudah ada', error: "PRODUCT_ALREADY_EXISTS" });
                 }
                 const insertProduct = await productModel.insertProduct(req.body);
                 if (insertProduct) {

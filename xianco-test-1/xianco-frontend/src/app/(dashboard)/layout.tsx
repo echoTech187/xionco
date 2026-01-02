@@ -29,16 +29,15 @@ type Props = {
 
 export default function DashboardLayout({ children }: Props) {
     const router = useRouter();
-    const [user, setUser] = useState<User[]>([]);
+    const [user, setUser] = useState<User | null>(null);
     useEffect(() => {
         async function checkSession() {
             const authenticate = await isAuthenticated();
             if (!authenticate) {
                 router.push("/login");
             } else {
-                const getUser = await getUserProfile();
-                setUser(getUser.data || []);
-                router.push("/dashboard");
+                const profile = await getUserProfile();
+                setUser(profile?.data as unknown as User);
             }
 
         }
@@ -50,7 +49,7 @@ export default function DashboardLayout({ children }: Props) {
         await removeSession('token')
         router.replace('/login')
     }
-    if (user.length < 1) {
+    if (!user) {
         return <div>Loading...</div>
     }
     return (

@@ -55,8 +55,10 @@ export default function ProductPage() {
     });
     useEffect(() => {
         function initState() {
-            if (state?.error || stateStock?.error) {
-                toast.error(state?.message || stateStock?.message, { description: state?.error || stateStock?.error })
+            if (state?.error) {
+                toast.error(state?.message, { description: state?.error })
+            } else if (stateStock?.error) {
+                toast.error(stateStock?.message, { description: stateStock?.error })
             } else if (state?.success || stateStock?.success) {
                 toast.success(state?.message || stateStock?.message, { description: state?.description || stateStock?.description })
                 setOpenEdit(false)
